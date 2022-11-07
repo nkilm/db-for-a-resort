@@ -1,0 +1,15 @@
+/* Hide Streamlit Branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+a{
+    text-decoration: none;
+}
+
+.highlight{
+    color: #09ab3b;
+    background-color: #eeecec;
+    padding: 0 4px;
+    border-radius: 5px;
+}
