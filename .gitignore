@@ -6,3 +6,5 @@ config.env
 
 # log files 
 *.logs 
+
+.vscode
