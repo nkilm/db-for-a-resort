@@ -8,8 +8,9 @@ a{
 }
 
 .highlight{
+    font-weight: 600;
     color: #09ab3b;
-    background-color: #eeecec;
+    background-color: #f6f6f6;
     padding: 0 4px;
     border-radius: 5px;
 }
