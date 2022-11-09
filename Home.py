@@ -1,12 +1,11 @@
 import streamlit as st
 from streamlit_lottie import st_lottie
-
 from utils.utils import load_lottieurl
 
 st.set_page_config(
     page_title="Mohite Resorts Pvt.Ltd",
     page_icon="./assets/logo.png",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="collapsed",
 )
 
