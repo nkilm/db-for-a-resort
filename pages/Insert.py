@@ -1,9 +1,36 @@
+import sys
+from os import environ
+from random import randint
+
+import mysql.connector
 import streamlit as st
+from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
+load_dotenv()
 
-def handle_insert():
-    pass
+try:
+    db = mysql.connector.connect(
+        host=environ.get("HOST"),
+        user=environ.get("DB_USER"),
+        password=environ.get("DB_PASSWORD"),
+        database=environ.get("DB"),
+    )
+
+    if db.is_connected():
+        print("DB Connected")
+    else:
+        print("DB Connection not successful")
+        sys.exit(1)
+
+    cursor = db.cursor()
+
+except mysql.connector.Error as e:
+    print(e)
+    print("Error Code:", e.errno)
+    print("SQLSTATE", e.sqlstate)
+    print("Message", e.msg)
+    sys.exit(1)
 
 
 st.markdown(
@@ -34,7 +61,7 @@ if option == "Customer":
                 "lname", placeholder="Enter your Last Name", label_visibility="hidden"
             )
 
-        st.text_input(
+        address = st.text_input(
             "address", placeholder="Enter your address", label_visibility="hidden"
         )
 
@@ -63,32 +90,93 @@ if option == "Customer":
         col1, col2 = st.columns(2)
         with col1:
             st.write("Check-In")
-            st.date_input("check-in", label_visibility="hidden")
+            check_in = st.date_input("check-in", label_visibility="hidden")
         with col2:
             st.write("Check-Out")
-            st.date_input("check-out", label_visibility="hidden")
+            check_out = st.date_input("check-out", label_visibility="hidden")
 
         st.write("#")
-        submit_btn = st.form_submit_button("INSERT", on_click=handle_insert)
+        submit_btn = st.form_submit_button("INSERT")
         if submit_btn:
-            st.success("Insert Query submitted!")
+            try:
+                cid = randint(1000, 9999)
+                q = (
+                    """insert into customer values (%d,"%s","%s","%s","%s","%s",%s,NULL)"""
+                    % (cid, fname, minit, lname, address, email, pno)
+                )
+                cursor.execute(q)
+                print(q)
+                q = """insert into reservation values(%d,%d,"%s","%s")""" % (
+                    cid,
+                    int(resort_id),
+                    check_in,
+                    check_out,
+                )
+                print(q)
+                cursor.execute(q)
+
+                db.commit()
+
+                st.success("Inserted Successfully")
+            except Exception as e:
+                st.error(e)
+
 else:
     with st.form(key="insert_form_resort", clear_on_submit=True):
-        st.text_input(
+        resort_name = st.text_input(
             "resort_name",
             placeholder="Enter the Resort name",
             label_visibility="hidden",
         )
 
+        resort_address = st.text_input(
+            "resort_address",
+            placeholder="Enter the Resort Address",
+            label_visibility="hidden",
+        )
+
         col1, col2 = st.columns(2)
         with col1:
-            st.number_input("Room Number")
+            room_no = st.number_input("Room Number", min_value=1, step=1)
         with col2:
-            st.number_input("Floor")
+            floor = st.number_input("Floor", step=1, min_value=0)
 
-        room_type = st.selectbox("room_type", ("Single", "Suite", "Double"))
+        room_type = st.selectbox("Room Type", ("Single", "Suite", "Double"))
 
         price = st.text_input("Price", placeholder="Enter the price")
 
+        ratings = st.slider("Enter the Ratings", 1.0, 5.0, value=4.5)
+
         st.write("#")
-        submit_btn = st.form_submit_button("INSERT", on_click=handle_insert)
+
+        submit_btn = st.form_submit_button("INSERT")
+        if submit_btn:
+            try:
+
+                resort_id = randint(1000, 9999)
+                q = """insert into resort values (%d,"%s","%s","%s")""" % (
+                    resort_id,
+                    resort_name,
+                    resort_address,
+                    ratings,
+                )
+                print(q)
+                cursor.execute(q)
+                q = """insert into room values (%d,%s,"%s",%s,%s)""" % (
+                    resort_id,
+                    room_no,
+                    room_type,
+                    floor,
+                    price,
+                )
+                print(q)
+                cursor.execute(q)
+
+                db.commit()
+
+                st.success("Inserted Successfully")
+            except Exception as e:
+                st.error(e)
+
+db.close()
+print("DB connection closed...")
