@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_lottie import st_lottie
+
 from utils.utils import load_lottieurl
 
 st.set_page_config(

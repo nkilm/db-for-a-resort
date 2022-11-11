@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
 load_dotenv()
+st.set_page_config(
+    layout="centered"
+)
 
 try:
     db = mysql.connector.connect(
@@ -23,7 +26,7 @@ try:
         print("DB Connection not successful")
         sys.exit(1)
 
-    cursor = db.cursor()
+    db_cursor = db.cursor()
 
 except mysql.connector.Error as e:
     print(e)
@@ -31,7 +34,6 @@ except mysql.connector.Error as e:
     print("SQLSTATE", e.sqlstate)
     print("Message", e.msg)
     sys.exit(1)
-
 
 st.markdown(
     """<p style='text-align: center;font-size:40px;'>Insert into Database</p>""",
@@ -104,7 +106,7 @@ if option == "Customer":
                     """insert into customer values (%d,"%s","%s","%s","%s","%s",%s,NULL)"""
                     % (cid, fname, minit, lname, address, email, pno)
                 )
-                cursor.execute(q)
+                db_cursor.execute(q)
                 print(q)
                 q = """insert into reservation values(%d,%d,"%s","%s")""" % (
                     cid,
@@ -113,7 +115,7 @@ if option == "Customer":
                     check_out,
                 )
                 print(q)
-                cursor.execute(q)
+                db_cursor.execute(q)
 
                 db.commit()
 
@@ -161,7 +163,7 @@ else:
                     ratings,
                 )
                 print(q)
-                cursor.execute(q)
+                db_cursor.execute(q)
                 q = """insert into room values (%d,%s,"%s",%s,%s)""" % (
                     resort_id,
                     room_no,
@@ -170,7 +172,7 @@ else:
                     price,
                 )
                 print(q)
-                cursor.execute(q)
+                db_cursor.execute(q)
 
                 db.commit()
 

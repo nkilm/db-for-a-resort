@@ -1,12 +1,37 @@
+import sys
+import pandas as pd
+from os import environ
+
+import mysql.connector
 import streamlit as st
-from streamlit_lottie import st_lottie
-
 from utils.utils import load_lottieurl
+from streamlit_lottie import st_lottie
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def handle_query_submit():
-    pass
+try:
+    db = mysql.connector.connect(
+        host=environ.get("HOST"),
+        user=environ.get("DB_USER"),
+        password=environ.get("DB_PASSWORD"),
+        database=environ.get("DB"),
+    )
 
+    if db.is_connected():
+        print("DB Connected")
+    else:
+        print("DB Connection not successful")
+        sys.exit(1)
+
+    db_cursor = db.cursor()
+
+except mysql.connector.Error as e:
+    print(e)
+    print("Error Code:", e.errno)
+    print("SQLSTATE", e.sqlstate)
+    print("Message", e.msg)
+    sys.exit(1)
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
@@ -23,7 +48,7 @@ st.markdown(
 
 with st.form(key="query_input"):
     query = st.text_area("\t", placeholder="SELECT * FROM customer", height=20)
-    submit_btn = st.form_submit_button("Execute", on_click=handle_query_submit)
+    submit_btn = st.form_submit_button("Execute")
     if not submit_btn:
         st.markdown(
             """
@@ -34,4 +59,14 @@ with st.form(key="query_input"):
         """
         )
     else:
-        st.write("Executing...")
+        try:
+            db_cursor.execute(query)
+            result = db_cursor.fetchall()
+            st.dataframe(
+                pd.DataFrame(result, columns=[i[0] for i in db_cursor.description])
+            )
+
+        except Exception as e:
+            st.error(e)
+
+db.close()
