@@ -70,7 +70,9 @@ else:
                 db_cursor.execute(q)
                 db.commit()
                 st.success(f"Resort {resort_id} deleted successfully")
+
             except Exception as e:
                 st.error(e)
 
 db.close()
+print("DB connection closed")

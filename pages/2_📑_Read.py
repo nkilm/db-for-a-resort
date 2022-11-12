@@ -70,8 +70,14 @@ table = st.selectbox(
 
 try:
     r = show_all(table)
-    st.dataframe(pd.DataFrame(r, columns=[i[0] for i in db_cursor.description]))
+    st.markdown(f"#### Total Entries - `{len(r)}`")
+
+    df = pd.DataFrame(r, columns=[i[0] for i in db_cursor.description])
+    df.index = [i + 1 for i in df.index]
+    st.dataframe(df, use_container_width=True)
+
 except Exception as e:
     st.error(e)
-    
+
 db.close()
+print("DB connection closed")

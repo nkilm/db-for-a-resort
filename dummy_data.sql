@@ -14,16 +14,16 @@ insert into offers Values('03','special offer', '1007','1007','25','2022-11-01',
 
 
 -- done
-insert into resort Values ('1001',"The Dukes Retreat",'Lonavala',5);
-insert into resort Values ('1002',"Ferreira Resort",'Lonavala',4);
-insert into resort Values ('1003',"Villa San Lorentz",'Lonavala',5);
-insert into resort Values ('1004',"Misty Meadows",'Lonavala',4);
-insert into resort Values ('1005',"Sunshine Resort",'Lonavala',5);
-insert into resort Values ('1006',"Dandeli Jungle Resort",'Dandeli',5);
-insert into resort Values ('1007',"Wild Planet Jungle Resort",'Dandeli',5);
-insert into resort Values ('1008',"Swast-Mast Resort",'Lonavala',4);
-insert into resort Values ('1009',"Alurkar Resort",'Belgaum',5);
-insert into resort Values ('1010',"Gavkari",'Belgaum',5);
+insert into resort Values ('1001',"The Dukes Retreat",'Lonavala',5,1999);
+insert into resort Values ('1002',"Ferreira Resort",'Lonavala',4,1799);
+insert into resort Values ('1003',"Villa San Lorentz",'Lonavala',5,1699);
+insert into resort Values ('1004',"Misty Meadows",'Lonavala',4,1499);
+insert into resort Values ('1005',"Sunshine Resort",'Lonavala',5,1699);
+insert into resort Values ('1006',"Dandeli Jungle Resort",'Dandeli',5,1499);
+insert into resort Values ('1007',"Wild Planet Jungle Resort",'Dandeli',5,1299);
+insert into resort Values ('1008',"Swast-Mast Resort",'Lonavala',4,1399);
+insert into resort Values ('1009',"Alurkar Resort",'Belgaum',5,1499);
+insert into resort Values ('1010',"Gavkari",'Belgaum',5,999);
 
 
 -- done
@@ -38,16 +38,6 @@ insert into room_service Values('108','suresh','1008');
 insert into room_service Values('109','keshav','1006');
 insert into room_service Values('110','sharad','1009');
 insert into room_service Values('111','munna','1010');
-
--- done
-insert into room Values('1001','101','single','0','1500');
-insert into room Values('1003','113','double','1','2500');
-insert into room Values('1003','112','single','0','1500');
-insert into room Values('1002','121','suite','2','4500');
-insert into room Values('1006','105','suite','0','4500');
-insert into room Values('1005','124','suite','2','4500');
-insert into room Values('1005','125','suite','2','4500');
-insert into room Values('1004','145','double','4','2500');
 
 -- done
 insert into customer Values('1001','narendra','','modi','gujarat' ,'modi@gmail.com' ,'1234567890','106');
@@ -88,9 +78,9 @@ insert into relatives Values('1006','manthan patil','m','friend');
 
 
 -- done
-insert into reservation values('1001','1001','2022-11-11','2022-11-21');
-insert into reservation values('1002','1002','2022-11-15','2022-11-22');
-insert into reservation values('1003','1003','2022-11-01','2022-11-15');
-insert into reservation values('1004','1004','2022-11-16','2022-11-21');
-insert into reservation values('1005','1005','2022-11-18','2022-11-21');
-insert into reservation values('1006','1006','2022-11-20','2022-11-26');
+insert into reservation values('1001','1001','2022-11-11','2022-11-21',15592);
+insert into reservation values('1002','1002','2022-11-15','2022-11-22',12593);
+insert into reservation values('1003','1003','2022-11-15','2022-11-227',11893);
+insert into reservation values('1004','1004','2022-11-16','2022-11-21',7495);
+insert into reservation values('1005','1005','2022-11-18','2022-11-21',4077.6);
+insert into reservation values('1006','1006','2022-11-20','2022-11-26',8994);

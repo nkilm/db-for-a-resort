@@ -148,3 +148,4 @@ else:
                 st.error(e)
 
 db.close()
+print("DB connection closed")

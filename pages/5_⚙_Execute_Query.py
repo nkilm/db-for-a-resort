@@ -62,11 +62,14 @@ with st.form(key="query_input"):
         try:
             db_cursor.execute(query)
             result = db_cursor.fetchall()
-            st.dataframe(
-                pd.DataFrame(result, columns=[i[0] for i in db_cursor.description])
-            )
+            st.markdown(f"#### Total Items - `{len(result)}`")
+
+            df = pd.DataFrame(result, columns=[i[0] for i in db_cursor.description])
+            df.index = [i + 1 for i in df.index]
+            st.dataframe(df, use_container_width=True)
 
         except Exception as e:
             st.error(e)
 
 db.close()
+print("DB connection closed")

@@ -1,9 +1,9 @@
 CREATE TABLE resort (
     resort_id DECIMAL(4, 0) PRIMARY KEY CHECK (resort_id > 0),
     resort_name varchar(50) NOT NULL,
-    pincode int,
     address varchar(40) NOT NULL,
-    rating varchar(5)
+    rating DECIMAL(3,2),
+    price_per_day float
 );
 CREATE TABLE room_service (
     waiter_id DECIMAL(3, 0) PRIMARY KEY,
@@ -34,24 +34,13 @@ CREATE TABLE offers (
     FOREIGN KEY (cid) REFERENCES customer(cid) ON DELETE CASCADE,
     PRIMARY KEY(resort_id, cid, offer_id)
 );
--- Price range can be changed
-CREATE TABLE room (
-    resort_id DECIMAL(4, 0) CHECK (resort_id > 0),
-    room_no decimal(3, 0) CHECK (room_no > 0),
-    category varchar(6) CHECK (category IN ('single', 'double', 'suite')),
-    floor SMALLINT,
-    price numeric CHECK (
-        price BETWEEN 0.00 AND 10000.00
-    ),
-    PRIMARY KEY(room_no, resort_id),
-    FOREIGN KEY (resort_id) REFERENCES resort(resort_id) ON DELETE CASCADE
-);
 CREATE TABLE reservation(
     cid DECIMAL(4, 0) CHECK (cid > 0),
     resort_id DECIMAL(4, 0) CHECK (resort_id > 0),
     checkin DATE NOT NULL,
     checkout DATE NOT NULL,
- CHECK (checkout > checkin),
+    amount float,
+    CHECK (checkout > checkin),
     FOREIGN KEY (cid) REFERENCES customer(cid) ON DELETE CASCADE,
     FOREIGN KEY (resort_id) REFERENCES resort(resort_id) ON DELETE CASCADE,
     PRIMARY KEY(resort_id, cid)

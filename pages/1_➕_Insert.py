@@ -1,6 +1,7 @@
 import sys
 from os import environ
 from random import randint
+from datetime import date
 
 import mysql.connector
 import streamlit as st
@@ -8,9 +9,7 @@ from dotenv import load_dotenv
 from streamlit_option_menu import option_menu
 
 load_dotenv()
-st.set_page_config(
-    layout="centered"
-)
+st.set_page_config(layout="centered")
 
 try:
     db = mysql.connector.connect(
@@ -108,11 +107,21 @@ if option == "Customer":
                 )
                 db_cursor.execute(q)
                 print(q)
-                q = """insert into reservation values(%d,%d,"%s","%s")""" % (
+                db_cursor.execute(
+                    f"select price_per_day from resort where resort_id={resort_id}"
+                )
+
+                price_per_day = int(db_cursor.fetchone()[0])
+                print(price_per_day)
+                amount = (check_out - check_in).days * price_per_day
+                print(amount)
+
+                q = """insert into reservation values(%d,%d,"%s","%s",%f)""" % (
                     cid,
                     int(resort_id),
                     check_in,
                     check_out,
+                    amount,
                 )
                 print(q)
                 db_cursor.execute(q)
@@ -120,11 +129,12 @@ if option == "Customer":
                 db.commit()
 
                 st.success("Inserted Successfully")
+                db.close()
             except Exception as e:
                 st.error(e)
 
 else:
-    with st.form(key="insert_form_resort", clear_on_submit=True):
+    with st.form(key="insert_form_resort"):
         resort_name = st.text_input(
             "resort_name",
             placeholder="Enter the Resort name",
@@ -137,14 +147,6 @@ else:
             label_visibility="hidden",
         )
 
-        col1, col2 = st.columns(2)
-        with col1:
-            room_no = st.number_input("Room Number", min_value=1, step=1)
-        with col2:
-            floor = st.number_input("Floor", step=1, min_value=0)
-
-        room_type = st.selectbox("Room Type", ("Single", "Suite", "Double"))
-
         price = st.text_input("Price", placeholder="Enter the price")
 
         ratings = st.slider("Enter the Ratings", 1.0, 5.0, value=4.5)
@@ -156,24 +158,15 @@ else:
             try:
 
                 resort_id = randint(1000, 9999)
-                q = """insert into resort values (%d,"%s","%s","%s")""" % (
+                q = """insert into resort values (%d,"%s","%s","%s","%s")""" % (
                     resort_id,
                     resort_name,
                     resort_address,
                     ratings,
-                )
-                print(q)
-                db_cursor.execute(q)
-                q = """insert into room values (%d,%s,"%s",%s,%s)""" % (
-                    resort_id,
-                    room_no,
-                    room_type,
-                    floor,
                     price,
                 )
                 print(q)
                 db_cursor.execute(q)
-
                 db.commit()
 
                 st.success("Inserted Successfully")
