@@ -61,7 +61,6 @@ table = st.selectbox(
         "relatives",
         "reservation",
         "resort",
-        "room",
         "room_service",
     ),
     label_visibility="hidden",
@@ -70,11 +69,14 @@ table = st.selectbox(
 
 try:
     r = show_all(table)
-    st.markdown(f"#### Total Entries - `{len(r)}`")
 
-    df = pd.DataFrame(r, columns=[i[0] for i in db_cursor.description])
-    df.index = [i + 1 for i in df.index]
-    st.dataframe(df, use_container_width=True)
+    _,col_m,_ = st.columns([2.5,10,1])
+
+    with col_m:
+        st.markdown(f"#### Total Entries - `{len(r)}`")
+        df = pd.DataFrame(r, columns=[i[0] for i in db_cursor.description])
+        df.index = [i + 1 for i in df.index]
+        st.dataframe(df, use_container_width=True)
 
 except Exception as e:
     st.error(e)
