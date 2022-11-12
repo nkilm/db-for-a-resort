@@ -35,11 +35,15 @@ except mysql.connector.Error as e:
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
-lottie_coding = load_lottieurl(
-    "https://assets10.lottiefiles.com/packages/lf20_KJzm1mEy8M.json"
-)
-
-st_lottie(lottie_coding, height=85, key="coffee logo")
+try:
+    lottie_coding = load_lottieurl(
+        # "https://assets10.lottiefiles.com/packages/lf20_KJzm1mEy8M.json"
+        # "https://assets1.lottiefiles.com/packages/lf20_8Trbef.json"
+        "https://assets7.lottiefiles.com/packages/lf20_vtiwaamr.json"
+    )
+    st_lottie(lottie_coding, height=100, key="coffee logo")
+except Exception as e:
+    st.error(e)
 
 st.markdown(
     """<p style='text-align: center;font-size:40px;'>Execute <span class="highlight">SQL</span> Queries on the Database</p>""",
@@ -60,6 +64,7 @@ with st.form(key="query_input"):
         )
     else:
         try:
+            print(query)
             db_cursor.execute(query)
             result = db_cursor.fetchall()
             _,col_m,_ = st.columns([2.5,10,1])
