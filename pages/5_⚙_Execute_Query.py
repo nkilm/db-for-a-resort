@@ -53,21 +53,38 @@ with st.form(key="query_input"):
         Example:
         ```sql
         SELECT * FROM customer LIMIT 5;
+
+        # multiple quries 
+        SHOW TABLES; DESC customer;
         ```
         """
         )
     else:
         try:
-            print(query)
-            db_cursor.execute(query)
-            result = db_cursor.fetchall()
-            _, col_m, _ = st.columns([2.5, 10, 1])
+            query = query.strip()
+            print(query.split(";"))
+            for q in query.split(";"):
+                if q == "":
+                    continue
+                q = q.strip()
+                db_cursor.execute(q)
+                result = db_cursor.fetchall()
+                _, col_m, _ = st.columns([2.5, 10, 1])
 
-            with col_m:
-                st.markdown(f"#### Total Items - `{len(result)}`")
-                df = pd.DataFrame(result, columns=[i[0] for i in db_cursor.description])
-                df.index = [i + 1 for i in df.index]
-                st.dataframe(df, use_container_width=True)
+                with col_m:
+                    st.markdown(f"#### Total Items - `{len(result)}`")
+                    st.markdown(
+                        f"""
+                    ```sql
+                    {q}
+                    ```
+                    """
+                    )
+                    df = pd.DataFrame(
+                        result, columns=[i[0] for i in db_cursor.description]
+                    )
+                    df.index = [i + 1 for i in df.index]
+                    st.dataframe(df, use_container_width=True)
 
         except Exception as e:
             st.error(e)
