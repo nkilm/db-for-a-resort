@@ -147,7 +147,7 @@ else:
             label_visibility="hidden",
         )
 
-        price = st.text_input("Price", placeholder="Enter the price")
+        price = st.text_input("Price", placeholder="Enter the price",label_visibility="hidden")
 
         ratings = st.slider("Enter the Ratings", 1.0, 5.0, value=4.5)
 
