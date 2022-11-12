@@ -16,12 +16,6 @@ try:
         database=environ.get("DB"),
     )
 
-    if db.is_connected():
-        print("DB Connected")
-    else:
-        print("DB Connection not successful")
-        sys.exit(1)
-
     db_cursor = db.cursor()
 
 except mysql.connector.Error as e:
@@ -29,7 +23,7 @@ except mysql.connector.Error as e:
     print("Error Code:", e.errno)
     print("SQLSTATE", e.sqlstate)
     print("Message", e.msg)
-    sys.exit(1)
+    st.error(e)
 
 st.set_page_config(layout="wide")
 
@@ -70,7 +64,7 @@ table = st.selectbox(
 try:
     r = show_all(table)
 
-    _,col_m,_ = st.columns([2.5,10,1])
+    _, col_m, _ = st.columns([2.5, 10, 1])
 
     with col_m:
         st.markdown(f"#### Total Entries - `{len(r)}`")

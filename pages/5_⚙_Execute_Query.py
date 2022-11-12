@@ -18,12 +18,6 @@ try:
         database=environ.get("DB"),
     )
 
-    if db.is_connected():
-        print("DB Connected")
-    else:
-        print("DB Connection not successful")
-        sys.exit(1)
-
     db_cursor = db.cursor()
 
 except mysql.connector.Error as e:
@@ -31,7 +25,7 @@ except mysql.connector.Error as e:
     print("Error Code:", e.errno)
     print("SQLSTATE", e.sqlstate)
     print("Message", e.msg)
-    sys.exit(1)
+    st.error(e)
 
 st.set_page_config(layout="wide", initial_sidebar_state="expanded")
 
@@ -67,8 +61,8 @@ with st.form(key="query_input"):
             print(query)
             db_cursor.execute(query)
             result = db_cursor.fetchall()
-            _,col_m,_ = st.columns([2.5,10,1])
-            
+            _, col_m, _ = st.columns([2.5, 10, 1])
+
             with col_m:
                 st.markdown(f"#### Total Items - `{len(result)}`")
                 df = pd.DataFrame(result, columns=[i[0] for i in db_cursor.description])

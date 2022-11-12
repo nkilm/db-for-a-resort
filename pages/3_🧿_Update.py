@@ -29,7 +29,7 @@ except mysql.connector.Error as e:
     print("Error Code:", e.errno)
     print("SQLSTATE", e.sqlstate)
     print("Message", e.msg)
-    sys.exit(1)
+    st.error(e)
 
 st.markdown(
     """<h1 style='text-align: center;'>UPDATION</h1>""",

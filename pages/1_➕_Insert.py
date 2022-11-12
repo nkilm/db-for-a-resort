@@ -19,12 +19,6 @@ try:
         database=environ.get("DB"),
     )
 
-    if db.is_connected():
-        print("DB Connected")
-    else:
-        print("DB Connection not successful")
-        sys.exit(1)
-
     db_cursor = db.cursor()
 
 except mysql.connector.Error as e:
@@ -32,7 +26,7 @@ except mysql.connector.Error as e:
     print("Error Code:", e.errno)
     print("SQLSTATE", e.sqlstate)
     print("Message", e.msg)
-    sys.exit(1)
+    st.error(e)
 
 st.markdown(
     """<p style='text-align: center;font-size:40px;'>Insert into Database</p>""",
@@ -147,7 +141,9 @@ else:
             label_visibility="hidden",
         )
 
-        price = st.text_input("Price", placeholder="Enter the price",label_visibility="hidden")
+        price = st.text_input(
+            "Price", placeholder="Enter the price", label_visibility="hidden"
+        )
 
         ratings = st.slider("Enter the Ratings", 1.0, 5.0, value=4.5)
 
