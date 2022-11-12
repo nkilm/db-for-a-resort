@@ -25,7 +25,7 @@ lottie_coding = load_lottieurl(
 st_lottie(lottie_coding, height=200, key="main logo")
 
 st.markdown(
-    "<h1 style='text-align: center;'>Mohite Resorts Pvt.Ltd</h1>",
+    "<h1 style='text-align: center;'><span style='border-bottom: 2px solid red'>Mohite Resorts Pvt.Ltd</span></h1>",
     unsafe_allow_html=True,
 )
 st.markdown(
