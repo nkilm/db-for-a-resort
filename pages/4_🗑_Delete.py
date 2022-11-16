@@ -1,4 +1,3 @@
-import sys
 import pandas as pd
 from os import environ
 
@@ -34,39 +33,75 @@ table = st.selectbox("delete_table", ("Customer", "Resort"), label_visibility="h
 if table == "Customer":
     with st.form(key="delete_form_cust"):
         st.subheader("Enter the Customer ID")
-        cid = st.number_input(
-            "cid", min_value=1000, max_value=9999, label_visibility="hidden"
+
+        db_cursor.execute("select cid from customer")
+
+        cid = st.selectbox(
+            "cid",
+            [int(i[0]) for i in db_cursor.fetchall()],
+            label_visibility="hidden",
         )
+        db_cursor.execute(f"select * from customer where cid={cid}")
+        info = db_cursor.fetchone()
 
         c_btn = st.form_submit_button("DELETE")
 
-        if c_btn:
-            try:
+        if info is None:
+            st.error(f"Customer with customer ID {cid} not found")
+        else:
+            if c_btn:
+                try:
+                    # q = "delete from customer where cid=%d" % cid
+                    # db_cursor.execute(q)
+                    # db.commit()
+                    st.success(f"Customer {cid} deleted successfully")
+                    st.write("---")
+                    st.subheader("Deleted Information")
+                    df = pd.DataFrame(
+                        [info], columns=[i[0] for i in db_cursor.description]
+                    )
+                    df.index = [i + 1 for i in df.index]
+                    st.dataframe(df, use_container_width=True)
 
-                q = "delete from customer where cid=%d" % cid
-                db_cursor.execute(q)
-                db.commit()
-                st.success(f"Customer {cid} deleted successfully")
-            except Exception as e:
-                st.error(e)
+                except Exception as e:
+                    st.error(e)
 else:
     with st.form(key="delete_form_resort"):
         st.subheader("Enter the Resort ID")
-        resort_id = st.number_input(
-            "resort_id", min_value=1000, max_value=9999, label_visibility="hidden"
+
+        db_cursor.execute("select resort_id from resort")
+
+        resort_id = st.selectbox(
+            "resort_id",
+            [int(i[0]) for i in db_cursor.fetchall()],
+            label_visibility="hidden",
         )
+        db_cursor.execute(f"select * from resort where resort_id={resort_id}")
+        info = db_cursor.fetchone()
 
         c_btn = st.form_submit_button("DELETE")
 
-        if c_btn:
-            try:
-                q = f"delete from resort where resort_id={resort_id}"
-                db_cursor.execute(q)
-                db.commit()
-                st.success(f"Resort {resort_id} deleted successfully")
+        if info is None:
+            st.error(f"Resort with resort ID {resort_id} not found")
+        else:
+            if c_btn:
+                try:
 
-            except Exception as e:
-                st.error(e)
+                    q = "delete from resort where resort_id=%d" % resort_id
+                    db_cursor.execute(q)
+                    st.success(f"Resort {resort_id} deleted successfully")
+                    st.write("---")
+                    st.subheader("Deleted Information")
+                    df = pd.DataFrame(
+                        [info],columns=["resort_id","resort_name","address","rating","price_per_day"]
+                    )
+                    df.index = [i + 1 for i in df.index]
+                    st.dataframe(df, use_container_width=True)
+                    db.commit()
+                except Exception as e:
+                    st.error(e)
+
+                
 
 db.close()
 print("DB connection closed")
