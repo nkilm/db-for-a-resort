@@ -58,11 +58,10 @@ if table == "Customer":
                     st.write("---")
                     st.subheader("Deleted Information")
                     df = pd.DataFrame(
-                        [info], columns=[i[0] for i in db_cursor.description]
+                        [info], columns=["cid","fname","minit","lname","address","email","contactNo","waiter_id"]
                     )
                     df.index = [i + 1 for i in df.index]
                     st.dataframe(df, use_container_width=True)
-
                 except Exception as e:
                     st.error(e)
 else:
