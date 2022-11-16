@@ -51,9 +51,9 @@ if table == "Customer":
         else:
             if c_btn:
                 try:
-                    # q = "delete from customer where cid=%d" % cid
-                    # db_cursor.execute(q)
-                    # db.commit()
+                    q = "delete from customer where cid=%d" % cid
+                    db_cursor.execute(q)
+                    db.commit()
                     st.success(f"Customer {cid} deleted successfully")
                     st.write("---")
                     st.subheader("Deleted Information")
