@@ -77,9 +77,10 @@ if option == "Customer":
             """<h4 style='text-align: center;'>Resort Info</h4>""",
             unsafe_allow_html=True,
         )
-
-        resort_id = st.text_input(
-            "resort_id", placeholder="Enter the resort id", label_visibility="hidden"
+        db_cursor.execute("select resort_id from resort")
+        
+        resort_id = st.selectbox(
+            "resort_id",  [int(i[0]) for i in db_cursor.fetchall()], label_visibility="hidden"
         )
 
         col1, col2 = st.columns(2)
