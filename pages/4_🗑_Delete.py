@@ -34,13 +34,14 @@ if table == "Customer":
     with st.form(key="delete_form_cust"):
         st.subheader("Enter the Customer ID")
 
-        db_cursor.execute("select cid from customer")
+        db_cursor.execute("select cid,fname,lname from customer")
 
-        cid = st.selectbox(
+        c_info = st.selectbox(
             "cid",
-            [int(i[0]) for i in db_cursor.fetchall()],
+            [f"{int(i[0])}-{i[1]} {i[2]}" for i in db_cursor.fetchall()],
             label_visibility="hidden",
         )
+        cid = c_info.split("-")[0]
         db_cursor.execute(f"select * from customer where cid={cid}")
         info = db_cursor.fetchone()
 
@@ -51,7 +52,7 @@ if table == "Customer":
         else:
             if c_btn:
                 try:
-                    q = "delete from customer where cid=%d" % cid
+                    q = f"delete from customer where cid={cid}" 
                     db_cursor.execute(q)
                     db.commit()
                     st.success(f"Customer {cid} deleted successfully")
@@ -68,13 +69,14 @@ else:
     with st.form(key="delete_form_resort"):
         st.subheader("Enter the Resort ID")
 
-        db_cursor.execute("select resort_id from resort")
+        db_cursor.execute("select resort_id,resort_name from resort")
 
-        resort_id = st.selectbox(
+        resort_info = st.selectbox(
             "resort_id",
-            [int(i[0]) for i in db_cursor.fetchall()],
+            [f"{int(i[0])} - {i[1]}" for i in db_cursor.fetchall()],
             label_visibility="hidden",
         )
+        resort_id = resort_info.split("-")[0]
         db_cursor.execute(f"select * from resort where resort_id={resort_id}")
         info = db_cursor.fetchone()
 
@@ -86,7 +88,7 @@ else:
             if c_btn:
                 try:
 
-                    q = "delete from resort where resort_id=%d" % resort_id
+                    q = f"delete from resort where resort_id={resort_id}"
                     db_cursor.execute(q)
                     st.success(f"Resort {resort_id} deleted successfully")
                     st.write("---")
